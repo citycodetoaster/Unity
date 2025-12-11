@@ -7,30 +7,40 @@ public class somethingNew : MonoBehaviour
     public int rowCount = 10;
     public int colCount = 10;
     public float spacing = 1.0f;
+    private PrimitiveType[] primitiveTypes = {
+            PrimitiveType.Cube,
+            PrimitiveType.Sphere,
+            PrimitiveType.Capsule,
+            PrimitiveType.Cylinder
+        };
     // Start is called before the first frame update
     void Start()
     {
-        GenerateSpheres();
+        Generate();
     }
 
-    void GenerateSpheres()
+    void Generate()
     {
         float startX = -(rowCount * spacing) / 2.0f + (spacing / 2.0f);
         float startZ = -(colCount * spacing) / 2.0f + (spacing / 2.0f);
         for (int i = 0; i <rowCount;i++){
             for (int ii = 0;ii<colCount;ii++){
+
+                PrimitiveType selectedType = primitiveTypes[Random.Range(0, primitiveTypes.Length)];
+                GameObject someShape = GameObject.CreatePrimitive(selectedType);
+
+                Renderer renderer = someShape.GetComponent<Renderer>();
+                renderer.material.color = GetRandomColor();
+                Bounds bounds = renderer.bounds;
+
+                float halfHeight = bounds.extents.y;
                 Vector3 position = new Vector3(
                     startX + i * spacing,
-                    0.5f,
+                    halfHeight,
                     startZ + ii * spacing
                 );
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.position = position;
-
-                Renderer renderer = sphere.GetComponent<Renderer>();
-                renderer.material.color = GetRandomColor();
-
-                sphere.transform.SetParent(transform);
+                someShape.transform.position = position;
+                someShape.transform.SetParent(transform);
             }
         }
     }
