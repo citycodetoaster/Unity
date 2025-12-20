@@ -16,3 +16,4 @@
 **/*.sln
 **/*.user
 **/*.suo
+/Toaster/
